@@ -1,13 +1,22 @@
 #   19.10.2019
 #           Developed by
-#   Léon Spohr and Philip Cander
+#   Leon Spohr and Philip Cander
 #   Version number: 1.0
 #   SNAKE game
+
+########    EDIT for Version number 1.0.1    #########
+#Changes:
+# -responsive design for startmenue
+#NOT YET DONE:
+# -needed to make font and text 'PRESS SPACE TO START' responsive in startmenue
 
 import pygame
 import random
 
 pygame.init()
+
+# when everything is done, change the version
+version = 1.0
 
 # importing image
 header = pygame.image.load("header.png")
@@ -24,7 +33,10 @@ score = 0
 # window settings
 screenwidth = 600
 screenheight = 500
-window = pygame.display.set_mode((screenwidth, screenheight))
+window = pygame.display.set_mode((screenwidth, screenheight), pygame.RESIZABLE)
+title = pygame.display.set_caption(f"SNAKE {version}")
+width = window.get_width()
+height = window.get_height()
 
 # some colors
 black = (0, 0, 0)
@@ -69,22 +81,34 @@ except:
 
 # defining the start method
 def startgame():
+    global width
+    global height
     global run
+    global window
     startgamerun = True
     while startgamerun:
         clock.tick(30)
+        # getting actual window size
+        width = window.get_width()
+        height = window.get_height()
+        # checking for events
         for event in pygame.event.get():
+            # event for resizing the window
+            if event.type == pygame.VIDEORESIZE:
+                window = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+            # event for QUIT
             if event.type == pygame.QUIT:
                 run = False
                 startgamerun = False
+            # event for run game
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     run = True
                     startgamerun = False
-
+        print(" X", width, "  Y", height)
         window.fill(black)
         startText = font3.render("PRESS SPACE TO START", True, white)
-        window.blit(startText, (50, 200))
+        window.blit(startText, (width/10, height/2.5))
         pygame.display.update()
 
 # defining the gameover method
