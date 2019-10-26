@@ -4,112 +4,51 @@
 #   Version number: 1.0
 #   SNAKE game
 
-########    EDIT for Version number 1.0.1    #########
-#Changes:
-# -responsive design for startmenue
-#NOT YET DONE:
-# -needed to make font and text 'PRESS SPACE TO START' responsive in startmenue
-
-import pygame
-import random
+from settings import *
 
 pygame.init()
 
-# when everything is done, change the version
-version = 1.0
 
-# importing image
-header = pygame.image.load("header.png")
+def bganimation():
+    global spritebg
+    global ibg
+    ibg += 1
+    if ibg == 30:
+        ibg = 0
+    spritebg = animationbg[ibg]
 
-# importing and setting up font
-font = pygame.font.SysFont("comicsansms", 20)
-font2 = pygame.font.SysFont("comicsansms", 60)
-font3 = pygame.font.SysFont("comicsansms", 40)
-
-
-# Score
-score = 0
-
-# window settings
-screenwidth = 600
-screenheight = 500
-window = pygame.display.set_mode((screenwidth, screenheight), pygame.RESIZABLE)
-title = pygame.display.set_caption(f"SNAKE {version}")
-width = window.get_width()
-height = window.get_height()
-
-# some colors
-black = (0, 0, 0)
-white = (250, 250, 250)
-red = (250, 0, 0)
-
-# size
-snakeSize = 20
-
-# speed and movement
-moveY = 100
-moveX = 20
-playerChangeY = True
-playerChangeX = True
-y = False
-
-# random starting value for cherry
-cherryY = random.randint(2, 24) * 20
-cherryX = random.randint(1, 29) * 20
-
-# snake body
-snakeLength = 0
-lateList = []
-
-# clock and speed
-clock = pygame.time.Clock()
-gameSpeed = 4
-
-# highscorefile
-try:
-    highscoreFile = open("highscore.txt", "r")
-    highscore = int(highscoreFile.read())
-    highscoreFile.close()
-except:
-    highscoreFile = open("highscore.txt", "w+")
-    highscoreFile.write("0")
-    highscoreFile.close()
-    highscoreFile = open("highscore.txt", "r")
-    highscore = int(highscoreFile.read())
-    highscoreFile.close()
+def cherryanimation():
+    global spritecherry
+    global ic
+    ic += 1
+    if ic == 14:
+        ic = 0
+    spritecherry = animationcherry[ic]
 
 
 # defining the start method
 def startgame():
-    global width
-    global height
+    global animation
+    global sprite
     global run
-    global window
     startgamerun = True
     while startgamerun:
         clock.tick(30)
-        # getting actual window size
-        width = window.get_width()
-        height = window.get_height()
-        # checking for events
         for event in pygame.event.get():
-            # event for resizing the window
-            if event.type == pygame.VIDEORESIZE:
-                window = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
-            # event for QUIT
             if event.type == pygame.QUIT:
                 run = False
                 startgamerun = False
-            # event for run game
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     run = True
                     startgamerun = False
-        print(" X", width, "  Y", height)
-        window.fill(black)
+
+        bganimation()
+        window.blit(spritebg, (0, 0))
         startText = font3.render("PRESS SPACE TO START", True, white)
-        window.blit(startText, (width/10, height/2.5))
+        window.blit(startText, (50, 200))
         pygame.display.update()
+
 
 # defining the gameover method
 def rungameover():
@@ -132,7 +71,7 @@ def rungameover():
     if score >= highscore:
         highscore = score
         # writing new highscore
-        highscorefile = open("highscore.txt", "w")
+        highscorefile = open("rec/highscore.txt", "w")
         highscorefile.write(f"{highscore}")
         highscorefile.close()
 
@@ -157,18 +96,15 @@ def rungameover():
     pygame.display.update()
 
 
-# setting running variables to basic
-run = False
-gameover = False
 
 # starting intro
 startgame()
 
 #   setting text up for drawing in main
 scoreText = font.render(f"{score}      SPEED {gameSpeed}", True, (250, 250, 250))
-highscorefile = open("highscore.txt", "r")
+highscorefile = open("rec/highscore.txt", "r")
 while run:
-    highscorefile = open("highscore.txt", "r")
+    highscorefile = open("rec/highscore.txt", "r")
     clock.tick(gameSpeed)
     for event in pygame.event.get():
         # QUIT
@@ -183,17 +119,17 @@ while run:
                 playerChangeY = False
                 print("hoch")
             # KEY DOWN = Move down
-            if event.key == pygame.K_DOWN:
+            elif event.key == pygame.K_DOWN:
                 y = True
                 playerChangeY = True
                 print("runter")
             # KEY LEFT = Move left
-            if event.key == pygame.K_LEFT:
+            elif event.key == pygame.K_LEFT:
                 y = False
                 playerChangeX = False
                 print("links")
             # KEY RIGHT = Move right
-            if event.key == pygame.K_RIGHT:
+            elif event.key == pygame.K_RIGHT:
                 y = False
                 playerChangeX = True
                 print("rechts")
@@ -220,6 +156,7 @@ while run:
 
     # coordinates of the snakes head
     print(" X", moveX, "  Y", moveY)
+    print(snakeLength)
 
     # checking if snake hits cherry
     if cherryY == moveY and cherryX == moveX:
@@ -264,7 +201,8 @@ while run:
     # blit score
     window.blit(scoreText, (10, 10))
     # blit cherry
-    pygame.draw.rect(window, red, (cherryX, cherryY, 20, 20))
+    cherryanimation()
+    window.blit(spritecherry, (cherryX, cherryY))
     # blit snake
     pygame.draw.rect(window, white, (moveX, moveY, snakeSize, snakeSize))
     pygame.display.update()
