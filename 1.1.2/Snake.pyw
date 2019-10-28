@@ -104,8 +104,6 @@ def rungameover():
     window.fill(blue)
     pygame.display.update()
 
-
-
 # starting intro
 startgame()
 
@@ -190,7 +188,6 @@ while run:
         # spawning cherry again random
         cherryX = random.randint(1, 29) * 20
         cherryY = random.randint(2, 24) * 20
-
 
     # checking if snake is hitting the border
     if moveYupdate <= (height/2)-(screenheight/2)+20 or moveXupdate == (width/2)-(screenwidth/2)-20 or moveYupdate >= (height/2)+(screenheight/2)\
