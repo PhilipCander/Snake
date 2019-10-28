@@ -12,8 +12,8 @@ font2 = pygame.font.SysFont("comicsansms", 60)
 font3 = pygame.font.SysFont("comicsansms", 40)
 
 # cherry frames
-cherry1 = pygame.image.load("rec/cherry.png")
-cherry2 = pygame.image.load("rec/cherry2.png")
+cherry1 = pygame.image.load("rec/cherry/cherry.png")
+cherry2 = pygame.image.load("rec/cherry/cherry2.png")
 animationcherry = [cherry1, cherry1, cherry1, cherry1, cherry1, cherry1, cherry1, cherry2, cherry2, cherry2, cherry2, cherry2, cherry2, cherry2]
 ic = 0
 
@@ -27,6 +27,12 @@ bg6 = pygame.image.load("rec/bg/bg6.png")
 animationbg = [bg1, bg1, bg1, bg2, bg2, bg2, bg3, bg3, bg3, bg4, bg4, bg4, bg5, bg5, bg5, bg6, bg6, bg6, bg5, bg5, bg5, bg4, bg4, bg4, bg3, bg3, bg3, bg2, bg2, bg2]
 ibg = 0
 
+# frames for the ground
+ground1 = pygame.image.load("rec/ground1.png")
+ground2 = pygame.image.load("rec/ground2.png")
+animationground = [ground1, ground1, ground1, ground1, ground1, ground1, ground2, ground2, ground2, ground2, ground2, ground2]
+igr = 0
+
 # point pictures
 points1 = pygame.image.load("rec/points/points1.png")
 points2 = pygame.image.load("rec/points/points2.png")
@@ -35,14 +41,37 @@ points4 = pygame.image.load("rec/points/points4.png")
 points5 = pygame.image.load("rec/points/points5.png")
 points6 = pygame.image.load("rec/points/points6.png")
 points7 = pygame.image.load("rec/points/points7.png")
-animationpoints = [points1, points1, points2, points2, points3, points3, points4, points4, points5, points5, points6, points6, points7, points7, points7, points7, points6, points6, points5, points5, points4, points4, points3, points3, points2, points2, points1, points1]
+animationpoints = [points1, points1, points2, points2, points3, points3, points4, points4, points5, points5, points6, points6, points7, points7, points7, points7]
 ipoi = 0
+pointsX = 0
+pointsY = 0
 points = False
 
+# timer pictures
+timer1 = pygame.image.load("rec/timer/timer1.png")
+timer2 = pygame.image.load("rec/timer/timer2.png")
+timer3 = pygame.image.load("rec/timer/timer3.png")
+timer4 = pygame.image.load("rec/timer/timer4.png")
+timer5 = pygame.image.load("rec/timer/timer5.png")
+timer6 = pygame.image.load("rec/timer/timer6.png")
+timer7 = pygame.image.load("rec/timer/timer7.png")
+timer8 = pygame.image.load("rec/timer/timer8.png")
+animationtimer = [timer1, timer1, timer2, timer2, timer3, timer3, timer4, timer4, timer5, timer5, timer6, timer6, timer7, timer7, timer8, timer8]
+itm = 0
+timer_done = True
+timer_count = 0
+timerX = random.randint(0, 0)
+timerY = random.randint(0, 0)
+
+
 # snake pictures
-snake_body = pygame.image.load("rec/snake_body.png")
-snake_head = pygame.image.load("rec/snake_head.png")
-snake_tail = pygame.image.load("rec/snake_tail.png")
+snake_body = pygame.image.load("rec/snake/snake_body.png")
+snake_head = pygame.image.load("rec/snake/snake_head.png")
+snake_tail = pygame.image.load("rec/snake/snake_tail.png")
+looking_left = True
+looking_right = False
+looking_up = False
+looking_down = False
 
 
 # window settings
@@ -100,4 +129,3 @@ except:
 # setting running variables to basic
 run = False
 gameover = False
-

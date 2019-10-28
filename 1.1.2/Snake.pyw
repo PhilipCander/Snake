@@ -8,6 +8,13 @@ from settings import *
 
 pygame.init()
 
+def groundanimation():
+    global spriteground
+    global igr
+    igr += 1
+    if igr == 12:
+        igr = 0
+    spriteground = animationground[igr]
 
 def bganimation():
     global spritebg
@@ -17,6 +24,8 @@ def bganimation():
         ibg = 0
     spritebg = animationbg[ibg]
 
+
+# cherry animation
 def cherryanimation():
     global spritecherry
     global ic
@@ -24,6 +33,37 @@ def cherryanimation():
     if ic == 14:
         ic = 0
     spritecherry = animationcherry[ic]
+
+
+# points animation
+def pointsanimation():
+    global spritepoints
+    global ipoi
+    global pointsY
+    global pointsX
+    global points
+    ipoi += 1
+    if ipoi == 16:
+        ipoi = 0
+        points = False
+        pointsX = -10
+        pointsY = -10
+    spritepoints = animationpoints[ipoi]
+
+
+# timer animation
+def timeranimation():
+    global spritetimer
+    global itm
+    global timer_done
+    global timer_count
+    itm +=1
+    timer_count += 1
+    if itm == 16:
+        itm = 0
+    spritetimer = animationtimer[itm]
+    if timer_count == 30:
+        timer_done = True
 
 
 # defining the start method
@@ -75,6 +115,8 @@ def rungameover():
     global moveY
     global moveX
     global y
+    global timer_done
+    global points
 
     # checking for new highscore
     if score >= highscore:
@@ -93,7 +135,8 @@ def rungameover():
     lateList = []
     snakeLength = 0
     score = 0
-    gameSpeed = 4
+    points = False
+    gameSpeed = 3
     moveY = 100
     moveX = 20
     playerChangeY = False
@@ -101,8 +144,10 @@ def rungameover():
     y = False
     cherryY = random.randint(2, 24) * 20
     cherryX = random.randint(1, 29) * 20
-    window.fill(blue)
+    timer_done = True
+    window.fill(black)
     pygame.display.update()
+
 
 # starting intro
 startgame()
@@ -155,20 +200,36 @@ while run:
         #   snake moving down
         if playerChangeY and moveYupdate <= ((height/2)+(screenheight/2) - snakeSize):
             moveY += 20
+            looking_down = True
+            looking_up = False
+            looking_left = False
+            looking_right = False
 
         #   snake moving up
         elif not playerChangeY and moveYupdate >= (height/2)-(screenheight/2)+10:
             moveY -= 20
+            looking_down = False
+            looking_up = True
+            looking_left = False
+            looking_right = False
 
     #   checking  if snake should move on X
     elif not y:
         #   snake moving right
         if playerChangeX and moveXupdate <= ((width/2)+(screenwidth/2) - snakeSize):
             moveX += 20
+            looking_down = False
+            looking_up = False
+            looking_left = False
+            looking_right = True
 
         #   snake moving left
         elif not playerChangeX and moveXupdate >= (width/2)-(screenwidth/2):
             moveX -= 20
+            looking_down = False
+            looking_up = False
+            looking_left = True
+            looking_right = False
 
     # updates X / Y after moving
     moveXupdate = moveX + (width / 2) - (screenwidth / 2)
@@ -176,8 +237,33 @@ while run:
 
     # coordinates of the snakes head
     print(" X", moveXupdate, "  Y", moveYupdate)
-    print(width, height)
-    print(screenwidth, screenheight)
+
+    # checking for looking direction
+    if looking_up:
+        snake_head = pygame.image.load("rec/snake/snake_head.png")
+        snake_head = pygame.transform.rotate(snake_head, 90)
+    if looking_down:
+        snake_head = pygame.image.load("rec/snake/snake_head.png")
+        snake_head = pygame.transform.rotate(snake_head, 270)
+    if looking_left:
+        snake_head = pygame.image.load("rec/snake/snake_head.png")
+        snake_head = pygame.transform.rotate(snake_head, 180)
+    if looking_right:
+        snake_head = pygame.image.load("rec/snake/snake_head.png")
+
+    # creating within random value random spawn for timer
+    if timer_done and gameSpeed >= 5:
+        spawn_chance = random.randint(0, 25)
+        if spawn_chance == 25:
+            timerX = random.randint(1, 29) * 20
+            timerY = random.randint(2, 24) * 20
+            timer_done = False
+
+    # checking if snake hits the timer
+    if timerX == moveX and timerY == moveY:
+        gameSpeed -= 1
+        timer_done = True
+        timer_count = 0
 
     # checking if snake hits cherry
     if cherryY == moveY and cherryX == moveX:
@@ -185,13 +271,16 @@ while run:
         gameSpeed += 0.25
         snakeLength += 1
         points = True
+        pointsX = moveXupdate
+        pointsY = moveYupdate
         # spawning cherry again random
         cherryX = random.randint(1, 29) * 20
         cherryY = random.randint(2, 24) * 20
 
+
     # checking if snake is hitting the border
-    if moveYupdate <= (height/2)-(screenheight/2)+20 or moveXupdate == (width/2)-(screenwidth/2)-20 or moveYupdate >= (height/2)+(screenheight/2)\
-            or moveXupdate >= (width/2)+(screenwidth/2):
+    if moveYupdate <= (height/2)-(screenheight/2)+20 or moveXupdate == (width/2)-(screenwidth/2)-20 or moveYupdate >= \
+            (height/2)+(screenheight/2) or moveXupdate >= (width/2)+(screenwidth/2):
         print("game over")
         # if true = game over
         gameover = True
@@ -203,6 +292,11 @@ while run:
     window.blit(animationbg[1], (0, 0))
     pygame.draw.rect(window, black,
                      ((width / 2) - (screenwidth / 2), (height / 2) - (screenheight / 2), screenwidth, screenheight))
+    # blit ground
+    groundX = (width / 2) - (screenwidth / 2)
+    groundY = (height / 2) - (screenheight / 2) + 40
+    groundanimation()
+    window.blit(spriteground, (groundX, groundY))
     # adding bodyparts if cherry was eaten
     if snakeLength >= 1:
         # [-snakelength] gets snakelenght-amounts of lists from the latelist
@@ -227,11 +321,22 @@ while run:
     window.blit(header, ((width/2)-(screenwidth/2), (height/2)-(screenheight/2)))
     # blit score
     window.blit(scoreText, ((width/2)-290, (height/2)-244))
+
     # blit cherry
     cherryXupdate = cherryX + (width/2) - (screenwidth/2)
     cherryYupdate = cherryY + (height/2) - (screenheight/2)
     cherryanimation()
     window.blit(spritecherry, (cherryXupdate, cherryYupdate))
+    # blit points
+    if points:
+        pointsanimation()
+        window.blit(spritepoints, (pointsX, pointsY))
+    # blit timer
+    if not timer_done:
+        timerXupdate = timerX + (width/2) - (screenwidth/2)
+        timerYupdate = timerY + (height/2) - (screenheight/2)
+        timeranimation()
+        window.blit(spritetimer, (timerXupdate, timerYupdate))
     # blit snake
     moveXupdate = moveX + (width/2) - (screenwidth/2)
     moveYupdate = moveY + (height/2) - (screenheight/2)
