@@ -356,16 +356,16 @@ while run:
 
     # checking for looking direction
     if looking_up:
-        snake_head = pygame.image.load("rec/snake/snake_head.png")
+        snake_head = pygame.image.load("rec/snake/snake_head.png").convert()
         snake_head = pygame.transform.rotate(snake_head, 90)
     if looking_down:
-        snake_head = pygame.image.load("rec/snake/snake_head.png")
+        snake_head = pygame.image.load("rec/snake/snake_head.png").convert()
         snake_head = pygame.transform.rotate(snake_head, 270)
     if looking_left:
-        snake_head = pygame.image.load("rec/snake/snake_head.png")
+        snake_head = pygame.image.load("rec/snake/snake_head.png").convert()
         snake_head = pygame.transform.rotate(snake_head, 180)
     if looking_right:
-        snake_head = pygame.image.load("rec/snake/snake_head.png")
+        snake_head = pygame.image.load("rec/snake/snake_head.png").convert()
 
     # creating within random value random spawn for timer
     if timer_done and gameSpeed >= 10:
@@ -421,22 +421,22 @@ while run:
         # extracts direction out of latelist
         # rotates up
         if lateList[-snakeLength][2] == True:
-            snake_tail = pygame.image.load("rec/snake/snake_tail.png")
+            snake_tail = pygame.image.load("rec/snake/snake_tail.png").convert()
             snake_tail = pygame.transform.rotate(snake_tail, 270)
             print("up")
         # rotates down
         elif lateList[-snakeLength][3] == True:
-            snake_tail = pygame.image.load("rec/snake/snake_tail.png")
+            snake_tail = pygame.image.load("rec/snake/snake_tail.png").convert()
             snake_tail = pygame.transform.rotate(snake_tail, 90)
             print("down")
         # rotates left
         elif lateList[-snakeLength][4] == True:
-            snake_tail = pygame.image.load("rec/snake/snake_tail.png")
+            snake_tail = pygame.image.load("rec/snake/snake_tail.png").convert()
             snake_tail = pygame.transform.rotate(snake_tail, 180)
             print("left")
         # rotates right
         elif lateList[-snakeLength][5] == True:
-            snake_tail = pygame.image.load("rec/snake/snake_tail.png")
+            snake_tail = pygame.image.load("rec/snake/snake_tail.png").convert()
             print("right")
         # iterates over all lists following (for the bodyparts)
         if snakeLength >= 2:
