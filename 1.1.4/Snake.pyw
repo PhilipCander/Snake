@@ -1,7 +1,7 @@
 #   29.10.2019
 #           Developed by
 #   Léon Spohr and Philip Cander
-#   Version number: 1.3
+#   Version number: 1.4
 #   SNAKE game
 
 from settings import *
